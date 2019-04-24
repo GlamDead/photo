@@ -1,0 +1,10 @@
+.vk{
+    color: white;
+    font-size: 18px;
+    background-color: transparent;
+    cursor: pointer;
+    text-decoration: underline;
+    :focus{
+        outline: none;
+    }
+}

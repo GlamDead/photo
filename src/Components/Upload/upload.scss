@@ -1,0 +1,45 @@
+.upload{
+    margin-top: 15px;
+    max-width: 450px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    p{
+        margin: 0 15px;
+        margin-bottom: 15px;
+    }
+    button{
+        width: 100%;
+        padding: 8px 15px;
+        border: 1px solid gray;
+        border-radius: 3px;
+        text-align: left;
+        margin-bottom: 15px;
+        position: relative;
+        &::after{
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 600;
+            content: "\f0dd";
+        }
+    }
+    form{
+        width: inherit;
+        height: 300px;
+        border: 5px dashed lightblue;
+        box-sizing: border-box;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        label{
+            padding: 0;
+            border: 0;
+            margin: 0;
+            color: blue;
+            text-decoration: underline;
+        }
+    }
+}

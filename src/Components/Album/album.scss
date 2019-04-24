@@ -1,0 +1,41 @@
+.album{
+    box-sizing: border-box;
+    border-bottom: 1px solid lightgray;
+    height: 100px;
+    display: flex;
+    padding: 15px 0;
+    padding-left: 35px;
+    justify-content: space-between;
+    cursor: pointer;
+    img{
+        width: 75px;
+        object-fit: cover;
+    }
+    &-desc{
+        flex-grow: 15;
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        h2{
+            font-size: 18px;
+            color: blue;
+        }
+        p{
+            font-size: 11px;
+            font-weight: bold;
+            color: gray;
+        }
+    }
+    button{
+        flex-grow: 2;
+        i{
+            color: blue;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        &:focus{
+            outline: none;
+        }
+    }
+}

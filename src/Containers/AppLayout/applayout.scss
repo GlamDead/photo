@@ -1,0 +1,36 @@
+.app-layout{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    label{
+        border: 1px solid LightGrey;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        margin-left: 10px;
+        padding: 7px 20px;
+        cursor: pointer;
+        background: white;
+        z-index: 2;
+        i{
+            font-size: 22px;
+            color: lightblue;
+        }
+    }
+    
+    
+    input, .item{
+        display: none;
+    }
+    
+    input:checked + label{
+        border-bottom: 0;
+        i{
+            color: blue;
+        }
+    }
+    
+    input:checked + label + .item{
+        display: block;
+    }
+}
+

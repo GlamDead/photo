@@ -1,0 +1,63 @@
+@import "./scss/smart-grid.scss";
+@import "./Components/Album/album.scss";
+@import "./Components/Button/button.scss";
+@import "./Components/NameBar/namebar.scss";
+@import "./Components/Photo/photo.scss";
+@import "./Components/PhotoPrev/photoprev.scss";
+@import "./Components/Tooltip/tooltip.scss";
+@import "./Components/Upload/upload.scss";
+@import "./Containers/AlbumLayout/albumlayout.scss";
+@import "./Containers/AppLayout/applayout.scss";
+@import "./Containers/Item/item.scss";
+@import "./Containers/Layout/layout.scss";
+@import "./Containers/PhotoLayout/photolayout.scss";
+
+body {
+	font-family: sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, ul,p, figure {
+	padding: 0;
+	margin: 0;
+}
+
+button{
+	border: none;
+	padding: 0;
+}
+
+ul{
+	list-style: none;
+}
+
+.container {
+  height: inherit;
+	@include wrapper();
+}
+
+a{
+	text-decoration: none;
+}
+
+.sign-in{
+	margin-top: 30px;
+	text-align: center;
+	font-size: 1.2em;
+}
+
+@media (max-width: 425px){
+	.photos{
+		justify-content: center;
+	}
+	.search-input input{
+		width: 88%;
+	}
+	.album{
+		padding-left: 10px;
+		button{
+			flex-grow: 10;
+		}
+	}
+}
+
+

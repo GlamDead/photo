@@ -1,0 +1,47 @@
+header{
+    height: 50px;
+    background-color: #2e2e2e;
+}
+
+form{
+    height: inherit;
+}
+
+.search{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: inherit;
+    &-input{
+        width: 50%;
+        border-radius: 20px;
+        box-sizing: border-box;
+        background-color: gray;
+        display: flex;
+        align-items: center;
+        input{
+            box-sizing: inherit;
+            border:none;
+            padding: 10px;
+            padding-left: 40px;
+            font-size: 14px;
+            color: white;
+            width: 95%;
+            background: url('../../img/search.svg') no-repeat 15px center;
+            background-size: 18px 18px;
+            &:focus{
+                outline: none;
+            }
+        }
+        button{
+            width: 14px;
+            height: 14px;
+            background-color: white;
+            border-radius: 50%;
+            color: gray;
+            font-size: 10px;
+            line-height: 0;
+        }
+    }
+}
+

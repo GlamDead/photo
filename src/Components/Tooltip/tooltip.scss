@@ -1,0 +1,31 @@
+.tooltip{
+    position: relative;
+    &-text{
+        left: 10px;
+        position: absolute;
+        background-color: rgba(0,0,0,0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 15px;
+        h3,span{
+            font-size: 0.8em;
+        }
+        h3{
+            display: inline;
+        }
+        span{
+            word-break: break-all
+        }
+        &::before{
+            width: 0;
+            height: 0;
+            border: 13px solid transparent;
+            position: absolute;
+            top: -13px;
+            left: 20px;
+            content: '';
+            border-bottom-color: rgba(0,0,0,0.8);
+            border-top: 0;
+        }
+    }
+}

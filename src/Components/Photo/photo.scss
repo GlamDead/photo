@@ -1,0 +1,32 @@
+.photo{
+    margin-top: 15px;
+    img{
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        margin-bottom: 30px;
+    }
+    figcaption{
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 450px;
+        width: 100%;
+        text-align: left;
+        ul{
+            margin-top: 10px;
+            width: inherit;
+            li{
+                margin-bottom: 8px;
+                display: flex;
+            }
+        }
+        h3{
+            width: 30%;
+            font-size: 16px;
+        }
+        span{
+            width: 70%;
+            word-break: break-all
+        }
+    }
+}
