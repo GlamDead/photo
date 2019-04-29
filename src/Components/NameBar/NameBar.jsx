@@ -1,37 +1,43 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { changeNameUser, changeTextNameBar, changeNameAlbum, minusPage } from '../../Store/actions';
+import { bindActionCreators } from 'redux';
 
+const mapStateToProps = (state) => {
+    return {
+        token: state.accessToken,
+        id: state.userId,
+        proxy: state.proxyUrl,
+        album: state.nameAlbum,
+        text: state.textNameBar,
+        name: state.nameUser,
+        page: state.page,
+        photo: state.photo
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeAlbum: bindActionCreators(changeNameAlbum, dispatch),
+        changeText: bindActionCreators(changeTextNameBar, dispatch),
+        changeUser: bindActionCreators(changeNameUser, dispatch),
+        minus: bindActionCreators(minusPage, dispatch)
+    }
+}
 
 
 class NameBar extends Component{
 
-    state = {
-        nameAlbum: "album",
-        text: "",
-        name: "user"
-    }
-
     updateState(){
         switch(this.props.page){
-            case 'album':
+            case 0:
                 this.nameUser();
                 break;
-            case 'photos':
-                if(this.props.albumName === undefined){
-                    this.setState({
-                        text: this.state.nameAlbum
-                    })
-                }
-                else{
-                    this.setState({
-                        nameAlbum: this.props.albumName,
-                        text: this.props.albumName
-                    })
-                }
+            case 1:
+                this.props.changeText(this.props.album)
                 break;
-            case 'photo':
-                this.setState({
-                    text: this.props.photoName.substring(23)
-                })
+            case 2:
+                this.props.changeText(this.props.photo.substring(23))
                 break;
             default:
                 break;
@@ -50,43 +56,28 @@ class NameBar extends Component{
 
 
     nameUser(){
-        if(this.state.name === "user"){
-            fetch(`https://api.vk.com/method/users.get?user_ids=${localStorage.getItem('user_id')}&fields=bdate&access_token=${localStorage.getItem("access_token")}&v=5.95`, 
-            {
-                mode: 'cors',
-                headers: {
-                  'Access-Control-Allow-Origin':'*'
-                }
-              })
+        if(this.props.name === "user"){
+            const url = `https://api.vk.com/method/users.get?user_ids=${this.props.id}&fields=bdate&access_token=${this.props.token}&v=5.95`;
+            fetch(this.props.proxy + url)
             .then(res => res.json())
             .then(json => {
-                this.setState({
-                    name: json.response[0].first_name,
-                    text: `Welcome, ${json.response[0].first_name}`
-                })
+                this.props.changeUser(json.response[0].first_name)
+                this.props.changeText(`Welcome, ${json.response[0].first_name}`)
             })
         }
         else{
-            this.setState({
-                text: `Welcome, ${this.state.name}`
-            })
+            this.props.changeText(`Welcome, ${this.props.name}`)
         }
     }
-
-
-    prevPage = () =>{
-        this.props.click()
-    }
-
 
     typePage(){
         let compon;
         switch(this.props.page){
-            case 'photos':
-                compon = <React.Fragment><i className="fas fa-chevron-left" onClick={this.prevPage}></i><i className="fas fa-folder"></i></React.Fragment>;
+            case 1:
+                compon = <React.Fragment><i className="fas fa-chevron-left" onClick={this.props.minus}></i><i className="fas fa-folder"></i></React.Fragment>;
                 break;
-            case 'photo':
-                compon = <i className="fas fa-chevron-left" onClick={this.prevPage}></i>;
+            case 2:
+                compon = <i className="fas fa-chevron-left" onClick={this.props.minus}></i>;
                 break;
             default:
                 compon = "";
@@ -100,10 +91,10 @@ class NameBar extends Component{
         return(
             <p className="item-welcome">
                 {view}
-                <span className="item-welcome-namealbum">{this.state.text}</span>
+                <span className="item-welcome-namealbum">{this.props.text}</span>
             </p>
         )
     }
 }
 
-export default NameBar;
+export default connect(mapStateToProps, mapDispatchToProps)(NameBar);

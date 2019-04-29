@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { changeNameAlbum, changeIdAlbum, changeShowPhotos } from '../../Store/actions';
+import { bindActionCreators } from 'redux';
 
 
+const mapDispathToProps = (dispatch) => {
+    return {
+        albumName: bindActionCreators(changeNameAlbum, dispatch),
+        albumId: bindActionCreators(changeIdAlbum, dispatch),
+        photos: bindActionCreators(changeShowPhotos, dispatch)
+    }
+}
 
 class Album extends Component{
 
     clickAlbum = () => {
-        this.props.click(this.props.id, this.props.name, "album");
+        this.props.photos([])
+        this.props.albumName(this.props.name)
+        this.props.albumId(this.props.id)
+        this.props.click();
     }
 
     render(){
@@ -25,4 +38,4 @@ class Album extends Component{
     }
 }
 
-export default Album;
+export default connect(null, mapDispathToProps)(Album)

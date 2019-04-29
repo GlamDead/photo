@@ -3,57 +3,10 @@ import Item from '../../Containers/Item/Item';
 
 class Pages extends Component{
 
-    state = {
-        page: 0,
-        nameAlbum: "",
-        namePhoto: ""
-    }
-
-
-    nextPage = (id, name, type) => {
-        if(type === "album"){
-            if(id !== null && id !== undefined && id !== ""){
-                localStorage.setItem('album_id', id)
-            }
-            this.setState({
-                page: this.state.page + 1,
-                nameAlbum: name 
-            })
-        }
-        else{
-            this.setState({
-                page: this.state.page + 1,
-                namePhoto: name
-            })
-        }
-    };
-
-    prevPage = () => {
-        this.setState({
-            page: this.state.page - 1
-        })
-    }
-
     page(){
-        let selectPage;
+        let selectPage = "";
         if(this.props.type === "upload"){
             selectPage = this.props.type
-        }
-        else{
-            switch(this.state.page){
-                case 0:
-                    selectPage = this.props.type
-                    break;
-                case 1:
-                    selectPage = "photos"
-                    break;
-                case 2:
-                selectPage = "photo"
-                    break;
-                default:
-                selectPage = ""
-                    break
-            }
         }
         return selectPage
     }
@@ -85,7 +38,7 @@ class Pages extends Component{
                 <label htmlFor={this.props.type} className="tab">
                     {icon}
                 </label>
-                <Item page={type} clickNext={this.nextPage} clickPrev={this.prevPage} id={this.state.id} albumName={this.state.nameAlbum} photoName={this.state.namePhoto}/>
+                <Item type={type} />
             </React.Fragment>       
         )
     }

@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
 import Album from "../../Components/Album/Album";
+import { Preloader, Placeholder } from 'react-preloading-screen';
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { plusPage, changeAlbumList } from '../../Store/actions';
+
+const mapStateToProps = (state) => {
+    return{
+        proxy: state.proxyUrl,
+        albums: state.albums,
+        token: state.accessToken,
+        userId: state.userId
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        plus: bindActionCreators(plusPage, dispatch),
+        addAlbums: bindActionCreators(changeAlbumList, dispatch)
+    }
+}
+
 
 class AlbumLayout extends Component{
 
-    state = {
-        albums: []
-    }
-
     componentDidMount(){
-        fetch(`https://api.vk.com/method/photos.getAlbums?owner_id=${localStorage.getItem('user_id')}&need_covers=1&access_token=${localStorage.getItem('access_token')}&v=5.95`)
+        const url = `https://api.vk.com/method/photos.getAlbums?owner_id=${this.props.userId}&need_covers=1&access_token=${this.props.token}&v=5.95`
+        fetch(this.props.proxy + url)
         .then(res => res.json())
         .then(json => {
-            this.setState({
-                albums: json.response.items
-            })
+            this.props.addAlbums(json.response.items)
         })
     }
 
@@ -31,16 +47,21 @@ class AlbumLayout extends Component{
     }
 
     albumList(){
-        return this.state.albums.map(album => <Album name={album.title} col={album.size} time={this.dateAgo(album.updated)} click={this.props.click} imgSrc={album.thumb_src} key={album.id} id={album.id}/>)
+        return this.props.albums.map(album => <Album name={album.title} col={album.size} time={this.dateAgo(album.updated)} click={this.props.plus} imgSrc={album.thumb_src} key={album.id} id={album.id}/>)
     }
 
     render(){   
         return(
-            <ul className="albums">
-                {this.albumList()}
-            </ul>
+            <Preloader>
+                <ul className="albums">
+                    {this.albumList()}
+                </ul>
+                <Placeholder>
+                    <span>Loading...</span>
+                </Placeholder>
+            </Preloader>
         )
     }
 }
 
-export default AlbumLayout;
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumLayout);

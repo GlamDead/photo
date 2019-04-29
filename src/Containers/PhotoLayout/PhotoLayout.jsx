@@ -1,6 +1,31 @@
 import React, {Component} from 'react';
 import PhotoPrev from '../../Components/PhotoPrev/PhotoPrev';
 import Tooltip from '../../Components/Tooltip/Tooltip';
+import { Preloader, Placeholder } from 'react-preloading-screen';
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
+import { changePhotosList, changeShowPhotos, changeLoading, plusPage } from '../../Store/actions';
+
+const mapStateToProps = (state) => {
+    return {
+        proxy: state.proxyUrl,
+        userId: state.userId,
+        token: state.accessToken,
+        albumId: state.idAlbum,
+        photos: state.photos,
+        showPhotos: state.showPhotos,
+        loadingState: state.loadingState
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        photosList: bindActionCreators(changePhotosList, dispatch),
+        showPhotosList: bindActionCreators(changeShowPhotos, dispatch),
+        load: bindActionCreators(changeLoading, dispatch),
+        plus: bindActionCreators(plusPage, dispatch)
+    }
+}
 
 const per = {
     containerWidth: 0,
@@ -11,19 +36,12 @@ const per = {
 
 class Photos extends Component{
 
-    state = {
-        photos: [],
-        showPhotos: [],
-        loadingState: false
-    }
-
     componentWillMount(){
-        fetch(`https://api.vk.com/method/photos.get?owner_id=${localStorage.getItem('user_id')}&album_id=${localStorage.getItem('album_id')}&access_token=${localStorage.getItem('access_token')}&v=5.95`)
+        const url = `https://api.vk.com/method/photos.get?owner_id=${this.props.userId}&album_id=${this.props.albumId}&access_token=${this.props.token}&v=5.95`;
+        fetch(this.props.proxy + url)
         .then(res => res.json())
         .then(json => {
-            this.setState({
-                photos: json.response.items
-            })
+            this.props.photosList(json.response.items)
         })
     }
 
@@ -35,26 +53,28 @@ class Photos extends Component{
         })
     }
      
-    componentDidUpdate(prevProps, prevState) {
-        if(this.state.photos !== prevState.photos){
+    componentDidUpdate(prevProps) {
+        if(this.props.photos !== prevProps.photos){
             this.photosList(0, this.numberPhoto())
+            this.forceUpdate()
         }
         
     }
 
+
+
     photosList(start, stop){
-        let array = this.state.showPhotos;
+        let array = this.props.showPhotos;
         for(let i = start; i < stop; i++){
-            if(this.state.photos[i] !== undefined){
-                array.push(<Tooltip key={this.state.photos[i].id} name={this.state.photos[i].sizes[2].url}><PhotoPrev click={this.props.click} imgSrc={this.state.photos[i].sizes[2].url} id={this.state.photos[i].id} img={this.state.photos[i].sizes}/></Tooltip>)
+            if(this.props.photos[i] !== undefined){
+                array.push(<Tooltip key={this.props.photos[i].id} name={this.props.photos[i].sizes[2].url}><PhotoPrev click={this.props.plus} imgSrc={this.props.photos[i].sizes[2].url} id={this.props.photos[i].id} img={this.props.photos[i].sizes}/></Tooltip>)
             }
             else{
                 break;
             }
         }
-        this.setState({
-            showPhotos: array
-        })   
+
+        this.props.showPhotosList(array) 
     }
 
     numberPhoto(){
@@ -67,31 +87,36 @@ class Photos extends Component{
      
      
     loadMorePhoto() {
-        if(this.state.loadingState){
+        if(this.props.loadingState){
             return;
         }
-        this.setState({ loadingState: true });
+        this.props.load(true)
         setTimeout(() => {
-            const lenght = this.state.showPhotos.length;
+            const lenght = this.props.showPhotos.length;
             this.photosList(lenght, lenght + per.countColumn)
-            this.setState({ loadingState: false });
+            this.props.load(false)
         }, 1000);
        }
      
     render() {
-        const load = this.state.loadingState ? <p className="loading"> loading More Photos..</p> : "";
+        const load = this.props.loadingState ? <p className="loading"> loading More Photos..</p> : "";
         const heightConatiner = window.innerHeight - 200;
         return (
-            <React.Fragment>
-            <div ref="iScroll" style={{ height: heightConatiner }}  className="photo-container">
-                <div className="photos">
-                    {this.state.showPhotos}
+            <Preloader>
+                <React.Fragment>
+                <div ref="iScroll" style={{ height: heightConatiner }}  className="photo-container">
+                    <div className="photos">
+                        {this.props.showPhotos}
+                    </div>
                 </div>
-           </div>
-           {load}
-           </React.Fragment>
+                {load}
+                </React.Fragment>
+                <Placeholder>
+                    <span>Loading...</span>
+                </Placeholder>
+           </Preloader>
         )
     }
 }
 
-export default Photos;
+export default connect(mapStateToProps, mapDispatchToProps)(Photos)

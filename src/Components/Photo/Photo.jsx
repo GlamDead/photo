@@ -1,13 +1,21 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+    return {
+        photo: state.photo
+    }
+}
 
 class Photo extends Component{
+    
     render(){
         return(
             <figure className="photo">
-                <img src={this.props.img} alt="" />
+                <img src={this.props.photo} alt="" />
                 <figcaption>
                     <ul>
-                        <li><h3>File name:</h3><span>{this.props.img.substring(23)}</span></li>
+                        <li><h3>File name:</h3><span>{this.props.photo.substring(23)}</span></li>
                     </ul>
                 </figcaption>
             </figure>
@@ -15,4 +23,5 @@ class Photo extends Component{
     }
 }
 
-export default Photo;
+
+export default connect(mapStateToProps)(Photo);

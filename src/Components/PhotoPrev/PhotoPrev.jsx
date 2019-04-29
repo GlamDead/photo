@@ -1,9 +1,19 @@
 import React, {Component} from 'react';
+import { changePhoto } from '../../Store/actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        photo: bindActionCreators(changePhoto, dispatch)
+    }
+}
 
 class PhotoPrev extends Component{
-
-    nextPage = () =>{
-        this.props.click(this.props.id, this.selectPhoto(), "photo")
+    
+    clickPhoto = () => {
+        this.props.photo(this.selectPhoto())
+        this.props.click()
     }
 
     selectPhoto(){
@@ -33,11 +43,12 @@ class PhotoPrev extends Component{
                 <img src={this.props.imgSrc} alt="" />
                 <figcaption>
                     <i className="fas fa-check"></i>
-                    <button onClick={this.nextPage}>Select</button>
+                    <button onClick={this.clickPhoto}>Select</button>
                 </figcaption>
             </figure>
         )
     }
 }
 
-export default PhotoPrev;
+
+export default connect(null, mapDispatchToProps)(PhotoPrev)

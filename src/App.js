@@ -4,6 +4,13 @@ import Header from "./Containers/Header/Header"
 import Layout from "./Containers/Layout/Layout";
 import AppLayout from "./Containers/AppLayout/AppLayout";
 import Pages from "./Components/Pages/Pages";
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+  return {
+    isOpen: state.buttonIsClick
+  }
+}
 
 const appPhoto = <Layout>
                     <AppLayout>
@@ -18,20 +25,9 @@ const signIn = <div className="container">
 
 class App extends Component {
 
-  state = {
-    isOpen: false
-  }
-
-  componentDidMount(){
-    if(localStorage.getItem("access_token") !== null){
-      this.setState({
-        isOpen: true
-      })
-    }
-  }
 
   render(){
-    const app = this.state.isOpen ?  appPhoto : signIn
+    const app = this.props.isOpen ?  appPhoto : signIn
     return(
       <React.Fragment>
         <Header />
@@ -41,4 +37,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App)

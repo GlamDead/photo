@@ -4,27 +4,37 @@ import AlbumLayout from '../AlbumLayout/AlbumLayout';
 import Upload from '../../Components/Upload/Upload';
 import PhotoLayout from '../PhotoLayout/PhotoLayout';
 import Photo from '../../Components/Photo/Photo';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+    return {
+        page: state.page
+    }
+}
+
 
 class Item extends Component{
 
     componentView(){
         let compon;
-        switch(this.props.page){
-            case 'upload':
-                compon = <Upload />;
-                break;
-            case 'album':
-                compon = <AlbumLayout click={this.props.clickNext}/>;
-                break;
-            case 'photos':
-                compon = <PhotoLayout click={this.props.clickNext}/>;
-                break;
-            case 'photo':
-                compon = <Photo img={this.props.photoName}/>;
-                break;
-            default:
-                compon = "";
-                break;
+        if (this.props.type === "upload"){
+            compon = <Upload />;
+        }
+        else{
+            switch(this.props.page){
+                case 0:
+                    compon = <AlbumLayout />;
+                    break;
+                case 1:
+                    compon = <PhotoLayout />;
+                    break;
+                case 2:
+                    compon = <Photo />;
+                    break;
+                default:
+                    compon = "";
+                    break;
+            }
         }
         return compon;
     }
@@ -33,11 +43,12 @@ class Item extends Component{
         const compon = this.componentView();
         return(
             <div className="item">
-                <NameBar page={this.props.page} click={this.props.clickPrev} albumName={this.props.albumName} photoName={this.props.photoName}/>
+                <NameBar />
                 {compon}
             </div>
         )
     }
 }
 
-export default Item;
+
+export default connect(mapStateToProps)(Item);
